@@ -75,7 +75,7 @@
           </q-tr>
           <q-tr v-show="props.expand" :props="props">
             <q-td class="bg-light-green-1" colspan="100%">
-              <div class="text-h4 float-right row inline flex-center items-center"><img class="q-pa-sm" src="/img/metro.ico"> {{ props.row.poi }} <q-icon name="money" class="q-pa-sm text-green-10" style="font-size: 2em;" ></q-icon> {{ props.row.pos }} <q-icon name="reorder" class="q-pa-sm text-red-11" style="font-size: 2em;" ></q-icon> {{ props.row.sum }} <a rel="nofollow" :href="'https://www.google.com/maps/dir/?api=1&destination='+props.row.geo+'&travelmode=driving'"><q-icon name="navigation" class="q-pa-sm text-teal" style="font-size: 4em;" ></q-icon></a></div>
+              <div class="text-h4 float-right row inline flex-center items-center"><img v-if="props.row.poi != ''" class="q-pa-sm" src="/img/metro.ico"> {{ props.row.poi }} <q-icon name="money" class="q-pa-sm text-green-10" style="font-size: 2em;" ></q-icon> {{ props.row.pos }} <q-icon name="reorder" class="q-pa-sm text-red-11" style="font-size: 2em;" ></q-icon> {{ props.row.sum }} <a rel="nofollow" :href="'https://www.google.com/maps/dir/?api=1&destination='+props.row.geo+'&travelmode=driving'"><q-icon name="navigation" class="q-pa-sm text-teal" style="font-size: 4em;" ></q-icon></a></div>
             </q-td>
           </q-tr>
         </template>
