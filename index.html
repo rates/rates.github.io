@@ -38,10 +38,12 @@
 }
 </style> 
 
-<div class="row inline flex-center items-center"><div class="row inline flex-center items-center q-pa-md" id="q-mon">
+<div class="row inline flex-center items-center"><div class="q-pa-md" id="q-mon">
 <q-table 
         title=""
         dense
+        flat
+        separator="none"
         :data="data"
         :columns="columns"
         row-key="cb"
