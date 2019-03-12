@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="robots" content="noindex">
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@^1.0.0-beta.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="https://unpkg.com/quasar-extras@latest/material-icons/material-icons.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    
+   
+  </head>
+  <body>
+
+<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quasar@^1.0.0-beta.0/dist/quasar.umd.min.js"></script>
+<!-- <script src="https://unpkg.com/quasar-framework@^0.17.0/dist/umd/quasar.mat.umd.min.js"></script> -->
+
+
+<div class="q-mb-md q-ma-xs text-h1 shadow-5 row inline flex-center items-center text-positive" style="width: 330px;">$<div id="USD" class="text-black"></div></div>
+<div class="q-mb-md q-ma-xs text-h1 shadow-5 row inline flex-center items-center text-primary" style="width: 330px;">€<div id="EUR" class="text-black"></div></div>
+<div id="BRENT" class="q-ma-xs text-h2 row inline flex-center text-weight-regular"></div>
+<div id="EURUSD" class="q-ma-xs text-h3 row inline flex-center"></div>
+<!-- 
+<button tabindex="0" type="button" class="q-btn inline relative-position q-btn-item non-selectable q-btn-rectangle q-focusable q-hoverable bg-secondary text-white"><div class="q-focus-helper"></div><div class="q-btn-inner row col items-center q-popup--skip justify-center"><div id="USD">67.70</div><div class="q-chip row no-wrap inline items-center q-chip-floating q-chip-dense q-chip-square bg-grey-2 text-secondary"><div class="q-chip-main ellipsis q-popup--skip">$</div></div></div></button> -->
+
+ 
+
+<div class="row inline flex-center items-center"><div class="q-pa-md row inline flex-center items-center" id="table_div_header"></div><img class="q-pa-md shadow-5 row inline flex-center items-center" id="location" src=""></div>
+<div></div>
+<div class="q-pa-md" id="table_div"></div>
+
+
+<style>
+.my-custom tr td {
+  font-size: 30pt;
+  vertical-align: top;
+  //color: #009688 !important;
+}
+.my-custom th {
+  .q-pa-xs;
+  font-size: 20pt;
+  color: #2196f3 !important;
+}
+</style>
+
+
+<div id="q-app">
+	
+<div class="q-pa-sm">
+      <q-table 
+        title=""
+        dense
+        :data="data"
+        :columns="columns"
+        :visible-columns="visibleColumns"
+        row-key="poi"
+        table-class="my-custom"
+        :rows-per-page-options="[0]" 
+        :pagination.sync="pagination">
+  
+        <template v-slot:body="props">
+          <q-tr  class="items-start content-start" :props="props" @click.native="props.expand = !props.expand">
+            
+            <q-td class="items-start content-start self-start text-right" key="bank" :props="props">
+              {{ props.row.name }}<div class="text-h5 text-h5-opacity row items-end justify-end"><div v-if="props.row.poi != ''" class="q-mr-xs text-grey">М</div><div>{{ props.row.poi }}</div></div>
+             <!--  <q-btn dense round flat :icon="props.expand ? 'arrow_drop_up' : 'arrow_drop_down'" @click="props.expand = !props.expand" ></q-btn> -->
+            </q-td>
+            <!-- <q-td key="diff" :props="props" >{{ props.row.rate }}</q-td> -->
+            <q-td key="rate" :props="props">{{ props.row.rate }}<div :class="[props.row.diff > 0 ? 'text-positive' : 'text-negative']">{{ props.row.diff }}</div></q-td>
+            <q-td key="time" :props="props">{{ props.row.time }}</q-td>
+            <q-td key="rub" :props="props">{{ props.row.rub }}</q-td>
+
+            </q-td>
+          </q-tr>
+          <q-tr v-show="props.expand" :props="props">
+            <q-td class="bg-light-green-1" colspan="100%">
+              <div class="text-h4 float-right row inline flex-center items-center"><img class="q-pa-sm" src="/img/metro.ico"> {{ props.row.poi }} <q-icon name="money" class="q-pa-sm text-green-10" style="font-size: 2em;" ></q-icon> {{ props.row.pos }} <q-icon name="reorder" class="q-pa-sm text-red-11" style="font-size: 2em;" ></q-icon> {{ props.row.sum }} <a rel="nofollow" :href="'https://www.google.com/maps/dir/?api=1&destination='+props.row.geo+'&travelmode=driving'"><q-icon name="navigation" class="q-pa-sm text-teal" style="font-size: 4em;" ></q-icon></a></div>
+            </q-td>
+          </q-tr>
+        </template>
+  
+      </q-table>
+    </div>
+
+</div>
+<script>
+
+
+navigator.serviceWorker && navigator.serviceWorker.register('./sw.js').then(function(registration) {
+  console.log('Excellent, registered with scope: ', registration.scope);
+});
+
+setInterval(setForex, 5000);
+
+
+
+function checkStatus(response) {
+  if (response.ok) {
+    return Promise.resolve(response);
+  } else {
+    return Promise.reject(new Error(response.statusText));
+  }
+}
+
+function parseJSON(response) {
+  return response.json();
+}
+
+const forex_urls = [
+  'https://charts.profinance.ru/html/tw/history?symbol=29&resolution=1&from=7777777777&to=7777777777',
+  'https://charts.profinance.ru/html/tw/history?symbol=30&resolution=1&from=7777777777&to=7777777777',
+  'https://charts.profinance.ru/html/tw/history?symbol=27&resolution=1&from=7777777777&to=7777777777',
+  'https://charts.profinance.ru/html/tw/history?symbol=42&resolution=1&from=7777777777&to=7777777777',
+  'https://sheets.googleapis.com/v4/spreadsheets/1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo/values/%D0%9C%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80!H5:N?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE'
+];
+
+setForex();
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(postPosition);
+  } else {
+    console.log('Geolocation is not supported by this browser');
+  }
+}
+
+var ll = '';
+function postPosition(position) {
+ll = position.coords.longitude + ',' + position.coords.latitude;
+//console.log(ll);
+fetch("https://script.google.com/macros/s/AKfycbwDKDH1OfgmkkiOWyAlnFFSceJrO4CGc7wqz8QM8A/exec?lat="+position.coords.latitude+"&long="+position.coords.longitude,{ method: 'POST'})
+ document.getElementById("location").src = 'https://static-maps.yandex.ru/1.x/?l=map&pt='+ll+',round&size=200,200&z=16';
+ }
+
+
+
+getLocation();
+
+function setForex() {
+
+// var req = new Request('https://charts.profinance.ru/html/tw/history?symbol=29&resolution=1&from=7777777777&to=7777777777');
+// console.log('', req.method)
+
+Promise.all(forex_urls.map(url =>
+  fetch(url,{ method: 'GET', referrer: ''})
+    .then(checkStatus)                 
+    .then(parseJSON)
+    .catch(error => console.log('There was a problem!', error))
+))
+.then(data => {
+document.getElementById("USD").innerText = parseFloat(data[0].c).toFixed(2);  
+document.getElementById("EUR").innerHTML = parseFloat(data[1].c).toFixed(2);
+document.getElementById("BRENT").innerHTML = parseFloat(data[2].c).toFixed(2);
+document.getElementById("EURUSD").innerHTML = parseFloat(data[3].c).toFixed(4);  
+
+})
+//fetch("https://script.google.com/macros/s/AKfycbwDKDH1OfgmkkiOWyAlnFFSceJrO4CGc7wqz8QM8A/exec?alt=33.33&long=33.33",{ method: 'POST'})
+}
+
+
+
+</script>
+
+<style>
+.header-text {
+   //background-color: orange;
+   font-size: 20pt;
+  }
+  .row-text {
+   //background-color: orange;
+   font-size: 24pt;
+  }
+  .odd-row {
+   background-color: #e1f5fe;
+   font-size: 24pt;
+   
+  }
+
+
+</style>
+
+ <script type="text/javascript">
+
+var cssClassNames = {
+'headerRow': 'header-text',
+'tableRow': 'row-text',
+'oddTableRow': 'odd-row',
+'selectedTableRow': '',
+'hoverTableRow': '',
+'headerCell': '',
+'tableCell': '',
+'rowNumberCell': ''};
+
+var options = {'allowHtml': true, 'cssClassNames': cssClassNames};
+
+      google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable_header);
+
+      function drawTable_header() {
+       var query_header = new google.visualization.Query('https://spreadsheets.google.com/tq?key=1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo&sheet=Монитор&output=html&usp=sharing');
+       query_header.setQuery('SELECT A, B, C, D, E, F, G limit 2');
+       //query.setQuery('SELECT H, I, J, K, L, M, N, O, P, R offset 2');
+       //query.setQuery('SELECT A, B, C, D, E, F, G, H, I, J, K offset 2 limit 2');
+       query_header.send(handleQueryResponse_header);
+      }
+
+      function handleQueryResponse_header(response) {
+    if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+    }
+    var data = response.getDataTable();
+    visualization1 = new google.visualization.Table(document.getElementById('table_div_header'));
+    visualization1.draw(data, options);}
+
+    </script>
+    
+ <!-- <script type="text/javascript">
+      google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable);
+
+      function drawTable() {
+       var query = new google.visualization.Query('https://spreadsheets.google.com/tq?key=1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo&sheet=Монитор&output=html&usp=sharing');
+       //query.setQuery('SELECT A, B, C, D, E, F, G limit 2');
+       query.setQuery('SELECT H, I, J, K, M offset 2');
+       //query.setQuery('SELECT A, B, C, D, E, F, G, H, I, J, K offset 2 limit 2');
+       query.send(handleQueryResponse);
+
+      
+      }
+
+      function handleQueryResponse(response) {
+    if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+    }
+    var data = response.getDataTable();
+    visualization = new google.visualization.Table(document.getElementById('table_div'));
+    visualization.draw(data,options );}
+
+    </script>
+<div class="text-caption q-ma-xs shadow-3">Lucky beta</div> -->
+
+<script>
+
+var  rjson_arr = [];
+
+var r_table = new Vue({
+  el: '#q-app',
+  data () {
+    return {
+      selected: [],
+      pagination: {
+         page: 1,    
+         rowsPerPage: 12 },
+      visibleColumns: ['bank','rate','time','rub'],
+      columns: [
+        {
+          name: 'bank',
+          required: true,
+          label: 'Банк',
+          style: 'width: 1px',
+          field: row => row.name,
+          format: val => `${val}`,
+          sortable: true
+        },
+        { name: 'diff', align: 'center', label: '', field: 'diff', sortable: true},
+        { name: 'rate', label: 'Курс',   style: 'width: 50px', field: 'rate', sortable: true},
+        { name: 'time', label: 'Время', field: 'time'},
+        { name: 'pos', label: 'POS', field: 'pos'},
+        { name: 'rub', label: '₽', field: 'rub'},
+        { name: 'sum', label: '', field: 'sum'},
+        { name: 'poi', label: '', field: 'poi'},
+        { name: 'geo', label: '', field: 'geo'}
+      ],
+      data: rjson_arr
+    }
+  }
+})
+
+
+const monitor_urls = [
+   'https://sheets.googleapis.com/v4/spreadsheets/1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo/values/%D0%9C%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80!H5:P?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE'
+];
+
+
+function setRatesTable(){
+  console.log('setTable');
+Promise.all(monitor_urls.map(url =>
+  fetch(url,{ method: 'GET', referrer: ''})
+    .then(checkStatus)                 
+    .then(parseJSON)
+    .catch(error => console.log('There was a problem!', error))
+))
+.then(data => {
+//localStorage.setItem('rjson', JSON.stringify(data[0].values)) ; 
+//var rjson = JSON.parse(localStorage.getItem('rjson'));
+var rjson = data[0].values;
+rjson_arr.length = 0;
+for (i=0;i<rjson.length;i++){
+var flip_geo = '';
+var d_pos = rjson[i][5].indexOf(',');
+var lat_str = rjson[i][5].substring(0,d_pos);
+var long_str = rjson[i][5].substring(d_pos+1,rjson[i][5].length);
+flip_geo = long_str + ',' + lat_str;
+rjson_arr.push({"name": rjson[i][0], "poi": rjson[i][1], "diff": rjson[i][2],"rate": rjson[i][3],"time": rjson[i][4],"geo": flip_geo,"pos": rjson[i][6], "rub": rjson[i][7],"sum": rjson[i][8]});
+}
+})
+}
+
+setInterval(setRatesTable, 5000);
+setRatesTable();
+
+//console.log(localStorage.getItem('rjson'));
+
+
+
+  </script>
+  </body>
+</html>
