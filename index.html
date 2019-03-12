@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta name="robots" content="noindex">
+    <meta charset="utf-8"> 
     <link rel="manifest" href="/manifest.json">
     <link href="https://cdn.jsdelivr.net/npm/quasar@^1.0.0-beta.0/dist/quasar.min.css" rel="stylesheet" type="text/css">
 
@@ -24,11 +25,35 @@
 <!-- 
 <button tabindex="0" type="button" class="q-btn inline relative-position q-btn-item non-selectable q-btn-rectangle q-focusable q-hoverable bg-secondary text-white"><div class="q-focus-helper"></div><div class="q-btn-inner row col items-center q-popup--skip justify-center"><div id="USD">67.70</div><div class="q-chip row no-wrap inline items-center q-chip-floating q-chip-dense q-chip-square bg-grey-2 text-secondary"><div class="q-chip-main ellipsis q-popup--skip">$</div></div></div></button> -->
 
- 
+<style>
+.my-custom-m tr td {
+  font-size: 24pt;
+  vertical-align: top;
+  //color: #009688 !important;
+}
+.my-custom-m th {
+  .q-pa-xs;
+  font-size: 14pt;
+  color: #2196f3 !important;
+}
+</style> 
 
-<div class="row inline flex-center items-center"><div class="q-pa-md row inline flex-center items-center" id="table_div_header"></div><img class="q-pa-md shadow-5 row inline flex-center items-center" id="location" src=""></div>
-<div></div>
-<div class="q-pa-md" id="table_div"></div>
+<div class="row inline flex-center items-center"><div class="q-pa-md row inline flex-center items-center" id="q-mon">
+<q-table 
+        title=""
+        dense
+        :data="data"
+        :columns="columns"
+        row-key="cb"
+        table-class="my-custom-m"
+        hide-bottom
+      >
+</div> 
+
+</div><img class="q-pa-md shadow-5 row inline flex-center items-center" id="location" src=""></div>
+<!-- <div></div>
+
+<div class="q-pa-md" id="table_div"></div> -->
 
 
 <style>
@@ -45,9 +70,13 @@
 </style>
 
 
+
+
 <div id="q-app">
-	
+
+ 
 <div class="q-pa-sm">
+
       <q-table 
         title=""
         dense
@@ -245,6 +274,32 @@ var options = {'allowHtml': true, 'cssClassNames': cssClassNames};
 <script>
 
 var  rjson_arr = [];
+var  mjson_arr = [];
+
+var m_table = new Vue({
+  el: '#q-mon',
+  data () {
+    return {
+      selected: [],
+      columns: [
+        {
+          name: 'cb',
+          label: 'ЦБ',
+          style: 'width: 1px',
+          field: 'cb'
+          
+        },
+        { name: 'atm', label: 'ATM', field: 'atm'},
+        { name: '150', label: '150', field: '150'},
+        { name: '200', label: '200', field: '200'},
+        { name: '300', label: '300', field: '300'},
+        { name: '350', label: '350', field: '350'},
+        { name: 'cur', label: 'CUR', field: 'cur'}
+      ],
+      data: mjson_arr
+    }
+  }
+})
 
 var r_table = new Vue({
   el: '#q-app',
@@ -262,7 +317,6 @@ var r_table = new Vue({
           label: 'Банк',
           style: 'width: 1px',
           field: row => row.name,
-          format: val => `${val}`,
           sortable: true
         },
         { name: 'diff', align: 'center', label: '', field: 'diff', sortable: true},
@@ -281,12 +335,15 @@ var r_table = new Vue({
 
 
 const monitor_urls = [
-   'https://sheets.googleapis.com/v4/spreadsheets/1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo/values/%D0%9C%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80!H5:P?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE'
+   'https://sheets.googleapis.com/v4/spreadsheets/1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo/values/%D0%9C%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80!H5:P?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE',
+   'https://sheets.googleapis.com/v4/spreadsheets/1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo/values/%D0%9C%D0%BE%D0%BD%D0%B8%D1%82%D0%BE%D1%80!A2:G?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE'
+
 ];
 
 
 function setRatesTable(){
-  console.log('setTable');
+
+//console.log('setTable');
 Promise.all(monitor_urls.map(url =>
   fetch(url,{ method: 'GET', referrer: ''})
     .then(checkStatus)                 
@@ -306,7 +363,14 @@ var long_str = rjson[i][5].substring(d_pos+1,rjson[i][5].length);
 flip_geo = long_str + ',' + lat_str;
 rjson_arr.push({"name": rjson[i][0], "poi": rjson[i][1], "diff": rjson[i][2],"rate": rjson[i][3],"time": rjson[i][4],"geo": flip_geo,"pos": rjson[i][6], "rub": rjson[i][7],"sum": rjson[i][8]});
 }
+
+var mjson = data[1].values;
+mjson_arr.length = 0;
+for (i=0;i<mjson.length;i++){
+mjson_arr.push({"cb": mjson[i][0], "atm": mjson[i][1], "150": mjson[i][2],"200": mjson[i][3],"300": mjson[i][4],"350": mjson[i][5],"cur": mjson[i][6]});
+}
 })
+
 }
 
 setInterval(setRatesTable, 5000);
