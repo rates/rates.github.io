@@ -1,7 +1,7 @@
 {
     "name": "Lucky",
     "short_name" : "Lucky",
-    "start_url": "/?me=me",
+    "start_url": "/",
     "icons": [
         {
             "src": "./192x192.png",
