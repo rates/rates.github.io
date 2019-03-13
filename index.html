@@ -15,15 +15,30 @@
       type="text/css"
       href="https://unpkg.com/quasar-extras@latest/material-icons/material-icons.css"
     />
-    <script
+    <!-- <script
       type="text/javascript"
       src="https://www.gstatic.com/charts/loader.js"
-    ></script>
+    ></script> -->
+<script src="https://www.gstatic.com/firebasejs/5.8.6/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDJyHi_GSrn7-x7vuCSulpnyXfFPrT1hAE",
+    authDomain: "bxrate.firebaseapp.com",
+    databaseURL: "https://bxrate.firebaseio.com",
+    projectId: "bxrate",
+    storageBucket: "bxrate.appspot.com",
+    messagingSenderId: "296821678127"
+  };
+  firebase.initializeApp(config);
+</script>
 
   </head>
   <body>
-    <script>function getURLParameter(name) {return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;}
-if (getURLParameter('me') != 'me') console.log('not me');
+
+
+
+
   </script>
 
     <script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
@@ -80,7 +95,7 @@ if (getURLParameter('me') != 'me') console.log('not me');
           hide-bottom
         ></q-table>
       </div>
-      <img class="inline q-pa-md shadow-5" id="location" src="g" />
+      <img class="inline q-pa-md shadow-5" id="location" src="" />
     </div>
     <!-- <div></div>
 
@@ -119,12 +134,12 @@ if (getURLParameter('me') != 'me') console.log('not me');
               @click.native="props.expand = !props.expand"
             >
               <q-td
-                class="items-start content-start self-start text-right"
+                
                 key="bank"
                 :props="props"
               >
                 {{ props.row.name }}
-                <div class="text-h5 text-h5-opacity row items-end justify-end">
+                <div class="text-h5 text-h5-opacity row justify-end">
                   <div v-if="props.row.poi != ''" class="q-mr-xs text-grey">
                     М
                   </div>
@@ -289,76 +304,6 @@ if (getURLParameter('me') != 'me') console.log('not me');
       }
     </style>
 
-<!--     <script type="text/javascript">
-      var cssClassNames = {
-        headerRow: "header-text",
-        tableRow: "row-text",
-        oddTableRow: "odd-row",
-        selectedTableRow: "",
-        hoverTableRow: "",
-        headerCell: "",
-        tableCell: "",
-        rowNumberCell: ""
-      };
-
-      var options = { allowHtml: true, cssClassNames: cssClassNames };
-
-      google.charts.load("current", { packages: ["table"] });
-      google.charts.setOnLoadCallback(drawTable_header);
-
-      function drawTable_header() {
-        var query_header = new google.visualization.Query(
-          "https://spreadsheets.google.com/tq?key=1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo&sheet=Монитор&output=html&usp=sharing"
-        );
-        query_header.setQuery("SELECT A, B, C, D, E, F, G limit 2");
-        //query.setQuery('SELECT H, I, J, K, L, M, N, O, P, R offset 2');
-        //query.setQuery('SELECT A, B, C, D, E, F, G, H, I, J, K offset 2 limit 2');
-        query_header.send(handleQueryResponse_header);
-      }
-
-      function handleQueryResponse_header(response) {
-        if (response.isError()) {
-          alert(
-            "Error in query: " +
-              response.getMessage() +
-              " " +
-              response.getDetailedMessage()
-          );
-          return;
-        }
-        var data = response.getDataTable();
-        visualization1 = new google.visualization.Table(
-          document.getElementById("table_div_header")
-        );
-        visualization1.draw(data, options);
-      }
-    </script> -->
-
-    <!-- <script type="text/javascript">
-      google.charts.load('current', {'packages':['table']});
-      google.charts.setOnLoadCallback(drawTable);
-
-      function drawTable() {
-       var query = new google.visualization.Query('https://spreadsheets.google.com/tq?key=1IwWh_1iQSXZ-vpbU0x4P6CvhMh7uEjO-e0qFMjfgxdo&sheet=Монитор&output=html&usp=sharing');
-       //query.setQuery('SELECT A, B, C, D, E, F, G limit 2');
-       query.setQuery('SELECT H, I, J, K, M offset 2');
-       //query.setQuery('SELECT A, B, C, D, E, F, G, H, I, J, K offset 2 limit 2');
-       query.send(handleQueryResponse);
-
-      
-      }
-
-      function handleQueryResponse(response) {
-    if (response.isError()) {
-        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-        return;
-    }
-    var data = response.getDataTable();
-    visualization = new google.visualization.Table(document.getElementById('table_div'));
-    visualization.draw(data,options );}
-
-    </script>
-<div class="text-caption q-ma-xs shadow-3">Lucky beta</div> -->
 
     <script>
       var rjson_arr = [];
@@ -403,7 +348,7 @@ if (getURLParameter('me') != 'me') console.log('not me');
                 name: "bank",
                 required: true,
                 label: "Банк",
-                style: "width: 1px",
+                style: "width: 300px",
                 field: row => row.name,
                 sortable: true
               },
@@ -493,7 +438,7 @@ if (getURLParameter('me') != 'me') console.log('not me');
       //console.log(localStorage.getItem('rjson'));
     </script>
     <script>function getURLParameter(name) {return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;}
-if (getURLParameter('me') != 'me') {document.clear(); document.body.innerHTML = '';}
+//if (getURLParameter('me') != 'me') {document.clear(); document.body.innerHTML = '';}
   </script>
   </body>
 </html>
