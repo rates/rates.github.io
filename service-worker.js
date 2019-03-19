@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.b8a7fafb3944fb3bff52bcdb13af7098.js"
+  "precache-manifest.e020361a8b50d497c4a74821be36cef6.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "rates"});
