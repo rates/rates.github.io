@@ -1,1 +1,1 @@
-{"name":"Lucky","short_name":"Lucky","description":"Bank currency exchange rates","display":"standalone","start_url":"/","icons":[{"src":"statics/icons/192x192.png","sizes":"192x192","type":"image/png"}],"theme_color":"#000000","background_color":"#000000","gcm_sender_id":"103953800507"}
+{"name":"Курсомер","short_name":"Курсомер","description":"Умный обмен валют","display":"standalone","start_url":"/","icons":[{"src":"statics/icons/192x192.png","sizes":"192x192","type":"image/png"}],"theme_color":"#000000","background_color":"#000000","gcm_sender_id":"103953800507"}
