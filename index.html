@@ -1,10 +1,7 @@
-<!DOCTYPE html><html><head><title>Bank Rates</title><meta name=robots content=noindex><meta charset=utf-8><meta name=description content="Bank currency exchange rates"><meta name=format-detection content="telephone=no"><meta name=msapplication-tap-highlight content=no><meta name=viewport content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"><link rel=icon href=statics/quasar-logo.png type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=statics/icons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=statics/icons/favicon-16x16.png><script type=text/javascript src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE&libraries=places"></script><script src=https://cdn.onesignal.com/sdks/OneSignalSDK.js async=""></script><script>function nearestMetro() {
-
-var map;
+<!DOCTYPE html><html><head><title>Bank Rates</title><meta name=robots content=noindex><meta charset=utf-8><meta name=description content="Bank currency exchange rates"><meta name=format-detection content="telephone=no"><meta name=msapplication-tap-highlight content=no><meta name=viewport content="user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1,width=device-width"><link rel=icon href=statics/quasar-logo.png type=image/x-icon><link rel=icon type=image/png sizes=32x32 href=statics/icons/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=statics/icons/favicon-16x16.png><script type=text/javascript src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCy3RpnWaZ90hyL8aO8-JWxnq1-F_jIwAE&libraries=places"></script><script src=https://cdn.onesignal.com/sdks/OneSignalSDK.js async=""></script><script>var map;
 var service;
-
-
-var bel = new google.maps.LatLng(55.6643688,37.7715802);
+  function initMap() {
+        var bel = new google.maps.LatLng(55.6643688,37.7715802);
 
  map = new google.maps.Map(
             document.getElementById('map'), {center: bel, zoom: 15});
@@ -15,7 +12,9 @@ var bel = new google.maps.LatLng(55.6643688,37.7715802);
     type: ['subway_station']
   };
 
-  service = new google.maps.places.PlacesService(map);
+
+        service = new google.maps.places.PlacesService(map);
+
   service.nearbySearch(request, callback);
 
 
@@ -23,10 +22,12 @@ function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
    console.log(results);
   }
-}
-}
+       
+      }
 
-nearestMetro();
+    }
+
+ 
 
   var OneSignal = window.OneSignal || [];
   OneSignal.push(function() {
@@ -36,4 +37,4 @@ nearestMetro();
         enable: true,
       },
     });
-  });</script><link href=css/47d98651.6f8c3dde.css rel=prefetch><link href=js/2d22c0ff.f1e553bc.js rel=prefetch><link href=js/47d98651.e24757b1.js rel=prefetch><link href=js/4b47640d.0b855adf.js rel=prefetch><link href=css/app.d3153500.css rel=preload as=style><link href=js/app.6f1786d2.js rel=preload as=script><link href=js/vendor.2f0ff1ea.js rel=preload as=script><link href=css/app.d3153500.css rel=stylesheet><link rel=manifest href=manifest.json><meta name=theme-color content=#000000><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=#000000><meta name=apple-mobile-web-app-title content=Курсомер><link rel=apple-touch-icon href=statics/icons/apple-icon-152x152.png><meta name=msapplication-TileImage content=statics/icons/ms-icon-144x144.png><meta name=msapplication-TileColor content=#000000></head><body><div id=q-app></div><div id=map></div><script type=text/javascript src=js/app.6f1786d2.js></script><script type=text/javascript src=js/vendor.2f0ff1ea.js></script></body></html>
+  });</script><link href=css/47d98651.6f8c3dde.css rel=prefetch><link href=js/2d22c0ff.f1e553bc.js rel=prefetch><link href=js/47d98651.e24757b1.js rel=prefetch><link href=js/4b47640d.0b855adf.js rel=prefetch><link href=css/app.d3153500.css rel=preload as=style><link href=js/app.0aaf5b76.js rel=preload as=script><link href=js/vendor.2f0ff1ea.js rel=preload as=script><link href=css/app.d3153500.css rel=stylesheet><link rel=manifest href=manifest.json><meta name=theme-color content=#000000><meta name=apple-mobile-web-app-capable content=yes><meta name=apple-mobile-web-app-status-bar-style content=#000000><meta name=apple-mobile-web-app-title content=Курсомер><link rel=apple-touch-icon href=statics/icons/apple-icon-152x152.png><meta name=msapplication-TileImage content=statics/icons/ms-icon-144x144.png><meta name=msapplication-TileColor content=#000000></head><body><div id=map></div><div id=q-app></div><script type=text/javascript src=js/app.0aaf5b76.js></script><script type=text/javascript src=js/vendor.2f0ff1ea.js></script></body></html>
