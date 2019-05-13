@@ -32,7 +32,7 @@
                 img.debugImage("debugPreprocessed");
             },
             /* The set of characters that could potentially be in this CAPTCHA system. */
-            character_set: "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+            character_set: "abcdefghijklmnopqrstuvwzyz0123456789",
             /* The minimum number of pixels required to call a grouping of similar pixels a blob. Use this to filter out small specks before segmentation. */
             blob_min_pixels: 50,
             /* The maximum number of pixels required to call a grouping of similar pixels a blob. */
@@ -54,9 +54,9 @@
         // Note that if your browser gives you a Cross Origin Request error in the console log it's because you're attempting to load an
         // image via the file:// protocol which is a security concern. You either need to set up a local server and use http:// or
         // find some way to disable that security setting during development (not recommended).
-        cbl.train("../captchas/cryptographp/FYH5.gif");
-        cbl.train("../captchas/cryptographp/CL4R.gif");
-        cbl.train("../captchas/cryptographp/KHYC.gif");    
+        cbl.train("../captchas/cryptographp/c89448.jpg");
+        // cbl.train("../captchas/cryptographp/CL4R.gif");
+        // cbl.train("../captchas/cryptographp/KHYC.gif");    
         
         var saveModel = function() {
             // Download the model after training!
