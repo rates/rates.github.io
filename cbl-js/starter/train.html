@@ -18,17 +18,13 @@
             /* Define a method that takes an input CAPTCHA and performs a set of image operations to remove noise. */
             preprocess: function(img) {
                 // Each pixel lighter than the grayscale threshold of 220 is turned white and everything darker is turned black.
-                img.binarize(220);
-                
-                // Output the work-in-progress image to an element with a specific ID so we can see the effect of our image operations.
+                img.removeGray(20);
                 img.debugImage("debugPreprocessed");
-                
-                // Flood-fill every blob (a grouping of similarly colored pixels) with a unique color. 
-                // This is an important last step of the segmentation phase since the segmenter will create a separate character
-                // image for each unique color in the image. If all the characters are black then the segmenter will only find one character.
-                img.colorRegions(50);
-                
-                // Once again output the image to a div or something so we see the effect of colorization.
+                img.blur();
+                img.debugImage("debugPreprocessed");
+                img.binarize(190);
+                img.debugImage("debugPreprocessed");
+                img.colorRegions(40, true);
                 img.debugImage("debugPreprocessed");
             },
             /* The set of characters that could potentially be in this CAPTCHA system. */
